@@ -503,14 +503,6 @@
       <Syntax>indexer declaration</Syntax>
     </Syntaxes>
   </Refactoring>
-  <Refactoring Id="RR0071" Identifier="MarkContainingClassAsAbstract" Title="Mark containing class as abstract">
-    <Syntaxes>
-      <Syntax>method declaration</Syntax>
-      <Syntax>property declaration</Syntax>
-      <Syntax>indexer declaration</Syntax>
-      <Syntax>event declaration</Syntax>
-    </Syntaxes>
-  </Refactoring>
   <Refactoring Id="RR0073" Identifier="MergeAssignmentExpressionWithReturnStatement" Title="Merge assignment expression with return statement">
     <Syntaxes>
       <Syntax>assignment expression followed with return statement</Syntax>
@@ -1198,6 +1190,16 @@
   <Refactoring Id="RR0186" Identifier="ChangeAccessibility" Title="Change accessibility">
     <Syntaxes>
       <Syntax>access modifier</Syntax>
+    </Syntaxes>
+  </Refactoring>
+  <Refactoring Id="RR0187" Identifier="FormatConstraintClauses" Title="Format constraint clauses">
+    <Syntaxes>
+      <Syntax>type parameter constraint clause</Syntax>
+    </Syntaxes>
+  </Refactoring>
+  <Refactoring Id="RR0187" Identifier="ReplaceForEachWithForAndReverseLoop" Title="Replace foreach with for and reverse loop" IsEnabledByDefault="false">
+    <Syntaxes>
+      <Syntax>foreach statement</Syntax>
     </Syntaxes>
   </Refactoring>
 </Refactorings>

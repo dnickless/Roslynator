@@ -103,6 +103,24 @@ namespace Roslynator.CSharp
 
             return TextSpan.FromBounds(block.OpenBraceToken.SpanStart, block.CloseBraceToken.Span.End);
         }
+
+        internal static BlockSyntax InsertStatement(this BlockSyntax block, StatementSyntax statement)
+        {
+            SyntaxList<StatementSyntax> statements = block.Statements;
+
+            int insertIndex = statements.Count;
+
+            if (!statement.IsKind(SyntaxKind.LocalFunctionStatement))
+            {
+                for (int i = statements.Count - 1; i >= 0; i--)
+                {
+                    if (statements[i].IsKind(SyntaxKind.LocalFunctionStatement))
+                        insertIndex--;
+                }
+            }
+
+            return block.WithStatements(statements.Insert(insertIndex, statement));
+        }
         #endregion BlockSyntax
 
         #region CastExpressionSyntax
@@ -1033,6 +1051,15 @@ namespace Roslynator.CSharp
 
             return literalExpression.IsKind(SyntaxKind.NumericLiteralExpression)
                 && string.Equals(literalExpression.Token.ValueText, "0", StringComparison.Ordinal);
+        }
+
+        internal static bool IsOneNumericLiteral(this LiteralExpressionSyntax literalExpression)
+        {
+            if (literalExpression == null)
+                throw new ArgumentNullException(nameof(literalExpression));
+
+            return literalExpression.IsKind(SyntaxKind.NumericLiteralExpression)
+                && string.Equals(literalExpression.Token.ValueText, "1", StringComparison.Ordinal);
         }
 
         internal static string GetStringLiteralInnerText(this LiteralExpressionSyntax literalExpression)
@@ -1995,6 +2022,72 @@ namespace Roslynator.CSharp
         {
             return list.IndexOf(node) != -1;
         }
+
+        public static TNode Find<TNode>(this SeparatedSyntaxList<TNode> list, SyntaxKind kind) where TNode : SyntaxNode
+        {
+            int index = list.IndexOf(kind);
+
+            if (index != -1)
+                return list[index];
+
+            return default(TNode);
+        }
+        
+        public static bool IsSingleLine<TNode>(
+            this SeparatedSyntaxList<TNode> list,
+            bool includeExteriorTrivia = true,
+            bool trim = true,
+            CancellationToken cancellationToken = default(CancellationToken)) where TNode : SyntaxNode
+        {
+            int count = list.Count;
+
+            if (count == 0)
+                return false;
+
+            SyntaxNode firstNode = list.First();
+
+            if (count == 1)
+                return IsSingleLine(firstNode, includeExteriorTrivia, trim, cancellationToken);
+
+            SyntaxTree tree = firstNode.SyntaxTree;
+
+            if (tree == null)
+                return false;
+
+            TextSpan span = TextSpan.FromBounds(
+                GetStartIndex(firstNode, includeExteriorTrivia, trim),
+                GetEndIndex(list.Last(), includeExteriorTrivia, trim));
+
+            return tree.IsSingleLineSpan(span, cancellationToken);
+        }
+
+        public static bool IsMultiLine<TNode>(
+            this SeparatedSyntaxList<TNode> list,
+            bool includeExteriorTrivia = true,
+            bool trim = true,
+            CancellationToken cancellationToken = default(CancellationToken)) where TNode : SyntaxNode
+        {
+            int count = list.Count;
+
+            if (count == 0)
+                return false;
+
+            SyntaxNode firstNode = list.First();
+
+            if (count == 1)
+                return IsMultiLine(firstNode, includeExteriorTrivia, trim, cancellationToken);
+
+            SyntaxTree tree = firstNode.SyntaxTree;
+
+            if (tree == null)
+                return false;
+
+            TextSpan span = TextSpan.FromBounds(
+                GetStartIndex(firstNode, includeExteriorTrivia, trim),
+                GetEndIndex(list.Last(), includeExteriorTrivia, trim));
+
+            return tree.IsMultiLineSpan(span, cancellationToken);
+        }
         #endregion SeparatedSyntaxList<T>
 
         #region StatementSyntax
@@ -2199,9 +2292,75 @@ namespace Roslynator.CSharp
             return list.IndexOf(kind) != -1;
         }
 
+        public static TNode Find<TNode>(this SyntaxList<TNode> list, SyntaxKind kind) where TNode : SyntaxNode
+        {
+            int index = list.IndexOf(kind);
+
+            if (index != -1)
+                return list[index];
+
+            return default(TNode);
+        }
+
         public static SyntaxList<MemberDeclarationSyntax> InsertMember(this SyntaxList<MemberDeclarationSyntax> members, MemberDeclarationSyntax member, IMemberDeclarationComparer comparer)
         {
             return members.Insert(comparer.GetInsertIndex(members, member), member);
+        }
+
+        public static bool IsSingleLine<TNode>(
+            this SyntaxList<TNode> list,
+            bool includeExteriorTrivia = true,
+            bool trim = true,
+            CancellationToken cancellationToken = default(CancellationToken)) where TNode : SyntaxNode
+        {
+            int count = list.Count;
+
+            if (count == 0)
+                return false;
+
+            SyntaxNode firstNode = list.First();
+
+            if (count == 1)
+                return IsSingleLine(firstNode, includeExteriorTrivia, trim, cancellationToken);
+
+            SyntaxTree tree = firstNode.SyntaxTree;
+
+            if (tree == null)
+                return false;
+
+            TextSpan span = TextSpan.FromBounds(
+                GetStartIndex(firstNode, includeExteriorTrivia, trim),
+                GetEndIndex(list.Last(), includeExteriorTrivia, trim));
+
+            return tree.IsSingleLineSpan(span, cancellationToken);
+        }
+
+        public static bool IsMultiLine<TNode>(
+            this SyntaxList<TNode> list,
+            bool includeExteriorTrivia = true,
+            bool trim = true,
+            CancellationToken cancellationToken = default(CancellationToken)) where TNode : SyntaxNode
+        {
+            int count = list.Count;
+
+            if (count == 0)
+                return false;
+
+            SyntaxNode firstNode = list.First();
+
+            if (count == 1)
+                return IsMultiLine(firstNode, includeExteriorTrivia, trim, cancellationToken);
+
+            SyntaxTree tree = firstNode.SyntaxTree;
+
+            if (tree == null)
+                return false;
+
+            TextSpan span = TextSpan.FromBounds(
+                GetStartIndex(firstNode, includeExteriorTrivia, trim),
+                GetEndIndex(list.Last(), includeExteriorTrivia, trim));
+
+            return tree.IsMultiLineSpan(span, cancellationToken);
         }
         #endregion SyntaxList<T>
 
@@ -3204,6 +3363,17 @@ namespace Roslynator.CSharp
 
             return accessModifier;
         }
+
+        public static SyntaxToken Find(this SyntaxTokenList tokenList, SyntaxKind kind)
+        {
+            foreach (SyntaxToken token in tokenList)
+            {
+                if (token.IsKind(kind))
+                    return token;
+            }
+
+            return default(SyntaxToken);
+        }
         #endregion SyntaxTokenList
 
         #region SyntaxTrivia
@@ -3359,6 +3529,36 @@ namespace Roslynator.CSharp
                 && triviaList[0].IsElasticMarker();
         }
         #endregion SyntaxTriviaList
+
+        #region TypeParameterConstraintClauseSyntax
+        internal static string NameText(this TypeParameterConstraintClauseSyntax constraintClause)
+        {
+            return constraintClause.Name.Identifier.ValueText;
+        }
+        
+        internal static SyntaxList<TypeParameterConstraintClauseSyntax> GetContainingList(this TypeParameterConstraintClauseSyntax constraintClause)
+        {
+            SyntaxNode parent = constraintClause.Parent;
+
+            switch (parent?.Kind())
+            {
+                case SyntaxKind.ClassDeclaration:
+                    return ((ClassDeclarationSyntax)parent).ConstraintClauses;
+                case SyntaxKind.DelegateDeclaration:
+                    return ((DelegateDeclarationSyntax)parent).ConstraintClauses;
+                case SyntaxKind.InterfaceDeclaration:
+                    return ((InterfaceDeclarationSyntax)parent).ConstraintClauses;
+                case SyntaxKind.LocalFunctionStatement:
+                    return ((LocalFunctionStatementSyntax)parent).ConstraintClauses;
+                case SyntaxKind.MethodDeclaration:
+                    return ((MethodDeclarationSyntax)parent).ConstraintClauses;
+                case SyntaxKind.StructDeclaration:
+                    return ((StructDeclarationSyntax)parent).ConstraintClauses;
+            }
+
+            return default(SyntaxList<TypeParameterConstraintClauseSyntax>);
+        }
+        #endregion TypeParameterConstraintClauseSyntax
 
         #region TypeSyntax
         public static bool IsVoid(this TypeSyntax type)
