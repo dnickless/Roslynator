@@ -77,5 +77,57 @@ namespace Roslynator
                 return ImmutableArray<DocumentNodeInfo>.Empty;
             }
         }
+
+        public static async Task<ImmutableArray<SyntaxNode>> FindNodesAsync(
+            ISymbol symbol,
+            Document document,
+            bool allowCandidate = false,
+            CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (symbol == null)
+                throw new ArgumentNullException(nameof(symbol));
+
+            if (document == null)
+                throw new ArgumentNullException(nameof(document));
+
+            List<SyntaxNode> nodes = null;
+
+            SyntaxNode root = await document.GetSyntaxRootAsync(cancellationToken).ConfigureAwait(false);
+
+            foreach (ReferencedSymbol referencedSymbol in await SymbolFinder.FindReferencesAsync(
+                symbol,
+                document.Solution(),
+                ImmutableHashSet.Create(document),
+                cancellationToken).ConfigureAwait(false))
+            {
+                foreach (ReferenceLocation referenceLocation in referencedSymbol.Locations)
+                {
+                    if (!referenceLocation.IsImplicit
+                        && (allowCandidate || !referenceLocation.IsCandidateLocation))
+                    {
+                        Location location = referenceLocation.Location;
+
+                        if (location.IsInSource)
+                        {
+                            SyntaxNode node = root.FindNode(location.SourceSpan, findInsideTrivia: true, getInnermostNodeForTie: true);
+
+                            Debug.Assert(node != null);
+
+                            if (node != null)
+                                (nodes ?? (nodes = new List<SyntaxNode>())).Add(node);
+                        }
+                    }
+                }
+            }
+
+            if (nodes != null)
+            {
+                return ImmutableArray.CreateRange(nodes);
+            }
+            else
+            {
+                return ImmutableArray<SyntaxNode>.Empty;
+            }
+        }
     }
 }

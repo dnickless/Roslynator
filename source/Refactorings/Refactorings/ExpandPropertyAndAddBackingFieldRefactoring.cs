@@ -53,7 +53,7 @@ namespace Roslynator.CSharp.Refactorings
             {
                 IPropertySymbol propertySymbol = semanticModel.GetDeclaredSymbol(propertyDeclaration, cancellationToken);
 
-                ImmutableArray<SyntaxNode> oldNodes = await document.FindNodesAsync(propertySymbol, cancellationToken: cancellationToken).ConfigureAwait(false);
+                ImmutableArray<SyntaxNode> oldNodes = await ReferenceFinder.FindNodesAsync(propertySymbol, document, cancellationToken: cancellationToken).ConfigureAwait(false);
 
                 IdentifierNameSyntax newNode = IdentifierName(fieldName);
 
