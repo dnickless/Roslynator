@@ -23,7 +23,7 @@ namespace Roslynator.CSharp.Refactorings
             if (left?.IsMissing == false
                 && right?.IsMissing == false
                 && !IsStringConcatenation(context, binaryExpression)
-                && left.GetTrailingTrivia().All(f => f.IsKind(SyntaxKind.WhitespaceTrivia))
+                && left.GetTrailingTrivia().All(f => f.IsWhitespaceTrivia())
                 && CheckOperatorTrailingTrivia(binaryExpression.OperatorToken.TrailingTrivia)
                 && right.GetLeadingTrivia().IsEmptyOrWhitespace())
             {

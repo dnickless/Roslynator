@@ -389,7 +389,7 @@ namespace Roslynator.CSharp
 
         private static SyntaxTrivia ComputeIndentation(SyntaxTrivia trivia)
         {
-            if (trivia.IsKind(SyntaxKind.WhitespaceTrivia))
+            if (trivia.IsWhitespaceTrivia())
             {
                 string s = trivia.ToString();
 
