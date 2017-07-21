@@ -1044,16 +1044,6 @@ namespace Roslynator.CSharp
                 && literalExpression.Token.Text.StartsWith("@", StringComparison.Ordinal);
         }
 
-        public static bool IsZeroNumericLiteral(this LiteralExpressionSyntax literalExpression)
-        {
-            return IsNumericLiteralExpression(literalExpression, "0");
-        }
-
-        internal static bool IsOneNumericLiteral(this LiteralExpressionSyntax literalExpression)
-        {
-            return IsNumericLiteralExpression(literalExpression, "1");
-        }
-
         internal static string GetStringLiteralInnerText(this LiteralExpressionSyntax literalExpression)
         {
             if (literalExpression == null)
