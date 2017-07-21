@@ -46,6 +46,8 @@
     <Compile Include="CSharp\Analysis\BracesAnalysisResult.cs" />
     <Compile Include="CSharp\GenericDeclarationHelper.cs" />
     <Compile Include="CSharp\Helpers\DetermineParameterTypeHelper.cs" />
+    <Compile Include="DocumentNodeInfo.cs" />
+    <Compile Include="ReferenceFinder.cs" />
     <Compile Include="CSharp\TypeParameterInfo.cs" />
     <Compile Include="CSharp\InterpolatedStringContentConversion.cs" />
     <Compile Include="CSharp\OperatorPrecedence.cs" />
