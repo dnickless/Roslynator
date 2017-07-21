@@ -1046,20 +1046,12 @@ namespace Roslynator.CSharp
 
         public static bool IsZeroNumericLiteral(this LiteralExpressionSyntax literalExpression)
         {
-            if (literalExpression == null)
-                throw new ArgumentNullException(nameof(literalExpression));
-
-            return literalExpression.IsKind(SyntaxKind.NumericLiteralExpression)
-                && string.Equals(literalExpression.Token.ValueText, "0", StringComparison.Ordinal);
+            return IsNumericLiteralExpression(literalExpression, "0");
         }
 
         internal static bool IsOneNumericLiteral(this LiteralExpressionSyntax literalExpression)
         {
-            if (literalExpression == null)
-                throw new ArgumentNullException(nameof(literalExpression));
-
-            return literalExpression.IsKind(SyntaxKind.NumericLiteralExpression)
-                && string.Equals(literalExpression.Token.ValueText, "1", StringComparison.Ordinal);
+            return IsNumericLiteralExpression(literalExpression, "1");
         }
 
         internal static string GetStringLiteralInnerText(this LiteralExpressionSyntax literalExpression)
@@ -2653,7 +2645,7 @@ namespace Roslynator.CSharp
             return node?.IsKind(SyntaxKind.TrueLiteralExpression, SyntaxKind.FalseLiteralExpression) == true;
         }
 
-        public static bool IsNumericLiteralExpression(this SyntaxNode node, int value)
+        internal static bool IsNumericLiteralExpression(this SyntaxNode node, int value)
         {
             if (node == null)
                 throw new ArgumentNullException(nameof(node));
@@ -2667,6 +2659,15 @@ namespace Roslynator.CSharp
             }
 
             return false;
+        }
+
+        internal static bool IsNumericLiteralExpression(this SyntaxNode node, string valueText)
+        {
+            if (node == null)
+                throw new ArgumentNullException(nameof(node));
+
+            return node.IsKind(SyntaxKind.NumericLiteralExpression)
+                && string.Equals(((LiteralExpressionSyntax)node).Token.ValueText, valueText, StringComparison.Ordinal);
         }
 
         public static bool IsKind(this SyntaxNode node, SyntaxKind kind1, SyntaxKind kind2)

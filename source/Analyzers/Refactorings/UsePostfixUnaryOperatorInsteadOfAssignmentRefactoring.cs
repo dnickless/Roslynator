@@ -29,7 +29,7 @@ namespace Roslynator.CSharp.Refactorings
                         ExpressionSyntax right = assignment.Right;
 
                         if (left?.IsMissing == false
-                            && right?.IsNumericLiteralExpression(1) == true)
+                            && right?.IsNumericLiteralExpression("1") == true)
                         {
                             ITypeSymbol typeSymbol = context.SemanticModel.GetTypeSymbol(left, context.CancellationToken);
 
@@ -63,7 +63,7 @@ namespace Roslynator.CSharp.Refactorings
                             ExpressionSyntax binaryRight = binaryExpression.Right;
 
                             if (binaryLeft?.IsMissing == false
-                                && binaryRight?.IsNumericLiteralExpression(1) == true)
+                                && binaryRight?.IsNumericLiteralExpression("1") == true)
                             {
                                 ITypeSymbol typeSymbol = context.SemanticModel.GetTypeSymbol(left, context.CancellationToken);
 
