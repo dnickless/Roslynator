@@ -9,13 +9,14 @@ using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Roslynator.CSharp.CodeFixes;
 using Roslynator.CSharp.Refactorings;
 
-namespace Roslynator.CSharp.CodeFixProviders
+namespace Roslynator.CSharp.CodeFixes
 {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(RemoveRedundantCastCodeFixProvider))]
     [Shared]
-    public class RemoveRedundantCastCodeFixProvider : BaseCodeFixProvider
+    public class RemoveRedundantCastCodeFixProvider : AbstractCodeFixProvider
     {
         public sealed override ImmutableArray<string> FixableDiagnosticIds
         {
@@ -26,13 +27,7 @@ namespace Roslynator.CSharp.CodeFixProviders
         {
             SyntaxNode root = await context.GetSyntaxRootAsync().ConfigureAwait(false);
 
-            SyntaxNode node = root
-                .FindNode(context.Span, getInnermostNodeForTie: true)?
-                .FirstAncestorOrSelf(f => f.IsKind(SyntaxKind.CastExpression, SyntaxKind.InvocationExpression));
-
-            Debug.Assert(node != null, $"{nameof(node)} is null");
-
-            if (node == null)
+            if (!TryFindFirstAncestorOrSelf(root, context.Span, out SyntaxNode node, f => f.IsKind(SyntaxKind.CastExpression, SyntaxKind.InvocationExpression)))
                 return;
 
             switch (node.Kind())

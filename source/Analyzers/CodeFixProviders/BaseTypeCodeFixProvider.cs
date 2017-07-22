@@ -2,7 +2,6 @@
 
 using System.Collections.Immutable;
 using System.Composition;
-using System.Diagnostics;
 using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
@@ -10,7 +9,7 @@ using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Roslynator.CSharp.Refactorings;
 
-namespace Roslynator.CSharp.CodeFixProviders
+namespace Roslynator.CSharp.CodeFixes
 {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(BaseTypeCodeFixProvider))]
     [Shared]
@@ -25,13 +24,7 @@ namespace Roslynator.CSharp.CodeFixProviders
         {
             SyntaxNode root = await context.GetSyntaxRootAsync().ConfigureAwait(false);
 
-            BaseTypeSyntax baseType = root
-                .FindNode(context.Span, getInnermostNodeForTie: true)?
-                .FirstAncestorOrSelf<BaseTypeSyntax>();
-
-            Debug.Assert(baseType != null, $"{nameof(baseType)} is null");
-
-            if (baseType == null)
+            if (!TryFindFirstAncestorOrSelf(root, context.Span, out BaseTypeSyntax baseType))
                 return;
 
             CodeAction codeAction = CodeAction.Create(

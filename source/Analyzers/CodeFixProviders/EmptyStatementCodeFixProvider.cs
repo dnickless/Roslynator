@@ -9,7 +9,7 @@ using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Roslynator.CSharp.Refactorings;
 
-namespace Roslynator.CSharp.CodeFixProviders
+namespace Roslynator.CSharp.CodeFixes
 {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(EmptyStatementCodeFixProvider))]
     [Shared]
@@ -24,11 +24,7 @@ namespace Roslynator.CSharp.CodeFixProviders
         {
             SyntaxNode root = await context.GetSyntaxRootAsync().ConfigureAwait(false);
 
-            EmptyStatementSyntax emptyStatement = root
-                .FindNode(context.Span, getInnermostNodeForTie: true)?
-                .FirstAncestorOrSelf<EmptyStatementSyntax>();
-
-            if (emptyStatement == null)
+            if (!TryFindFirstAncestorOrSelf(root, context.Span, out EmptyStatementSyntax emptyStatement))
                 return;
 
             CodeAction codeAction = CodeAction.Create(

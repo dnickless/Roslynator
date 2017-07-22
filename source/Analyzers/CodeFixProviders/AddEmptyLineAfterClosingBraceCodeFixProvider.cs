@@ -2,14 +2,14 @@
 
 using System.Collections.Immutable;
 using System.Composition;
-using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.CSharp;
 
-namespace Roslynator.CSharp.CodeFixProviders
+namespace Roslynator.CSharp.CodeFixes
 {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(AddEmptyLineAfterClosingBraceCodeFixProvider))]
     [Shared]
@@ -24,11 +24,7 @@ namespace Roslynator.CSharp.CodeFixProviders
         {
             SyntaxNode root = await context.GetSyntaxRootAsync().ConfigureAwait(false);
 
-            SyntaxTrivia trivia = root.FindTrivia(context.Span.Start);
-
-            Debug.Assert(trivia.IsEndOfLineTrivia(), $"{nameof(trivia)} is not EOF");
-
-            if (!trivia.IsEndOfLineTrivia())
+            if (!TryFindTrivia(root, context.Span.Start, out SyntaxTrivia trivia, SyntaxKind.EndOfLineTrivia))
                 return;
 
             CodeAction codeAction = CodeAction.Create(

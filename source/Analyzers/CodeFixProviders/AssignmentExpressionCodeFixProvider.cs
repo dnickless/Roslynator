@@ -10,7 +10,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Roslynator.CSharp.Refactorings;
 
-namespace Roslynator.CSharp.CodeFixProviders
+namespace Roslynator.CSharp.CodeFixes
 {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(AssignmentExpressionCodeFixProvider))]
     [Shared]
@@ -31,11 +31,7 @@ namespace Roslynator.CSharp.CodeFixProviders
         {
             SyntaxNode root = await context.GetSyntaxRootAsync().ConfigureAwait(false);
 
-            AssignmentExpressionSyntax assignment = root
-                .FindNode(context.Span, getInnermostNodeForTie: true)?
-                .FirstAncestorOrSelf<AssignmentExpressionSyntax>();
-
-            if (assignment == null)
+            if (!TryFindFirstAncestorOrSelf(root, context.Span, out AssignmentExpressionSyntax assignment))
                 return;
 
             foreach (Diagnostic diagnostic in context.Diagnostics)

@@ -2,7 +2,6 @@
 
 using System.Collections.Immutable;
 using System.Composition;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
@@ -13,7 +12,7 @@ using Roslynator.CSharp.DiagnosticAnalyzers;
 using Roslynator.CSharp.Refactorings;
 using Roslynator.CSharp.Refactorings.If;
 
-namespace Roslynator.CSharp.CodeFixProviders
+namespace Roslynator.CSharp.CodeFixes
 {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(IfStatementCodeFixProvider))]
     [Shared]
@@ -34,13 +33,7 @@ namespace Roslynator.CSharp.CodeFixProviders
         {
             SyntaxNode root = await context.GetSyntaxRootAsync().ConfigureAwait(false);
 
-            IfStatementSyntax ifStatement = root
-                .FindNode(context.Span, getInnermostNodeForTie: true)?
-                .FirstAncestorOrSelf<IfStatementSyntax>();
-
-            Debug.Assert(ifStatement != null, $"{nameof(ifStatement)} is null");
-
-            if (ifStatement == null)
+            if (!TryFindFirstAncestorOrSelf(root, context.Span, out IfStatementSyntax ifStatement))
                 return;
 
             foreach (Diagnostic diagnostic in context.Diagnostics)

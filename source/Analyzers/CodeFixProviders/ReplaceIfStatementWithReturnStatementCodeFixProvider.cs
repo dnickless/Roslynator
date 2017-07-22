@@ -11,7 +11,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Roslynator.CSharp.Refactorings;
 
-namespace Roslynator.CSharp.CodeFixProviders
+namespace Roslynator.CSharp.CodeFixes
 {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(ReplaceIfStatementWithReturnStatementCodeFixProvider))]
     [Shared]
@@ -26,10 +26,7 @@ namespace Roslynator.CSharp.CodeFixProviders
         {
             SyntaxNode root = await context.GetSyntaxRootAsync().ConfigureAwait(false);
 
-            var ifStatement = (IfStatementSyntax)root.DescendantNodes(context.Span)
-                .FirstOrDefault(f => f.IsKind(SyntaxKind.IfStatement) && context.Span.Contains(f.Span));
-
-            if (ifStatement == null)
+            if (!TryFindFirstDescendantOrSelf(root, context.Span, out IfStatementSyntax ifStatement))
                 return;
 
             CodeAction codeAction = CodeAction.Create(

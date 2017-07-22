@@ -10,7 +10,7 @@ using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Roslynator.CSharp.Refactorings.FormatSummary;
 
-namespace Roslynator.CSharp.CodeFixProviders
+namespace Roslynator.CSharp.CodeFixes
 {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(SingleLineDocumentationCommentTriviaCodeFixProvider))]
     [Shared]
@@ -30,13 +30,7 @@ namespace Roslynator.CSharp.CodeFixProviders
         {
             SyntaxNode root = await context.GetSyntaxRootAsync().ConfigureAwait(false);
 
-            DocumentationCommentTriviaSyntax documentationComment = root
-                .FindNode(context.Span, findInsideTrivia: true)?
-                .FirstAncestorOrSelf<DocumentationCommentTriviaSyntax>();
-
-            Debug.Assert(documentationComment != null, $"{nameof(documentationComment)} is null");
-
-            if (documentationComment == null)
+            if (!TryFindFirstAncestorOrSelf(root, context.Span, out DocumentationCommentTriviaSyntax documentationComment, findInsideTrivia: true, getInnermostNodeForTie: false))
                 return;
 
             foreach (Diagnostic diagnostic in context.Diagnostics)

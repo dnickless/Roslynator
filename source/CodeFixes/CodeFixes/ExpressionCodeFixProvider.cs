@@ -1,16 +1,13 @@
 ﻿// Copyright (c) Josef Pihrt. All rights reserved. Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
-using System;
 using System.Collections.Immutable;
 using System.Composition;
-using System.Diagnostics;
 using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Roslynator.CSharp.Helpers;
 using Roslynator.CSharp.Refactorings;
 
 namespace Roslynator.CSharp.CodeFixes
@@ -45,11 +42,7 @@ namespace Roslynator.CSharp.CodeFixes
 
             SyntaxNode root = await context.GetSyntaxRootAsync().ConfigureAwait(false);
 
-            var expression = root.FindNode(context.Span, getInnermostNodeForTie: true) as ExpressionSyntax;
-
-            Debug.Assert(expression != null, $"{nameof(expression)} is null");
-
-            if (expression == null)
+            if (!TryFindNode(root, context.Span, out ExpressionSyntax expression))
                 return;
 
             foreach (Diagnostic diagnostic in context.Diagnostics)

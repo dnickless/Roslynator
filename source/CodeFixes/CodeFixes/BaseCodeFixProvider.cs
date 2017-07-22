@@ -5,7 +5,7 @@ using Microsoft.CodeAnalysis.CodeFixes;
 
 namespace Roslynator.CSharp.CodeFixes
 {
-    public abstract class BaseCodeFixProvider : CodeFixProvider
+    public abstract class BaseCodeFixProvider : AbstractCodeFixProvider
     {
         public const string EquivalenceKeyPrefix = "Roslynator.CSharp.CodeFixes";
 

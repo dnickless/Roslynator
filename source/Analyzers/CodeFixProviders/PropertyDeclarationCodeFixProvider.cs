@@ -9,7 +9,7 @@ using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Roslynator.CSharp.Refactorings;
 
-namespace Roslynator.CSharp.CodeFixProviders
+namespace Roslynator.CSharp.CodeFixes
 {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(PropertyDeclarationCodeFixProvider))]
     [Shared]
@@ -29,11 +29,7 @@ namespace Roslynator.CSharp.CodeFixProviders
         {
             SyntaxNode root = await context.GetSyntaxRootAsync().ConfigureAwait(false);
 
-            PropertyDeclarationSyntax property = root
-                .FindNode(context.Span, getInnermostNodeForTie: true)?
-                .FirstAncestorOrSelf<PropertyDeclarationSyntax>();
-
-            if (property == null)
+            if (!TryFindFirstAncestorOrSelf(root, context.Span, out PropertyDeclarationSyntax property))
                 return;
 
             foreach (Diagnostic diagnostic in context.Diagnostics)

@@ -12,7 +12,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Roslynator.CSharp;
 using Roslynator.CSharp.Refactorings;
 
-namespace Roslynator.CSharp.CodeFixProviders
+namespace Roslynator.CSharp.CodeFixes
 {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(UseExplicitTypeInsteadOfVarCodeFixProvider))]
     [Shared]
@@ -32,13 +32,7 @@ namespace Roslynator.CSharp.CodeFixProviders
         {
             SyntaxNode root = await context.GetSyntaxRootAsync().ConfigureAwait(false);
 
-            SyntaxNode node = root
-                .FindNode(context.Span, getInnermostNodeForTie: true)?
-                .FirstAncestorOrSelf(SyntaxKind.VariableDeclaration, SyntaxKind.DeclarationExpression);
-
-            Debug.Assert(node != null, $"{nameof(node)} is null");
-
-            if (node == null)
+            if (!TryFindFirstAncestorOrSelf(root, context.Span, out SyntaxNode node, f => f.IsKind(SyntaxKind.VariableDeclaration, SyntaxKind.DeclarationExpression)))
                 return;
 
             if (node.IsKind(SyntaxKind.VariableDeclaration))

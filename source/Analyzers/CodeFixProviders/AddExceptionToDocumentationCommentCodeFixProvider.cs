@@ -2,7 +2,6 @@
 
 using System.Collections.Immutable;
 using System.Composition;
-using System.Diagnostics;
 using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
@@ -11,7 +10,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Roslynator.CSharp.Refactorings.AddExceptionToDocumentationComment;
 
-namespace Roslynator.CSharp.CodeFixProviders
+namespace Roslynator.CSharp.CodeFixes
 {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(AddExceptionToDocumentationCommentCodeFixProvider))]
     [Shared]
@@ -26,13 +25,7 @@ namespace Roslynator.CSharp.CodeFixProviders
         {
             SyntaxNode root = await context.GetSyntaxRootAsync().ConfigureAwait(false);
 
-            SyntaxNode node = root
-                .FindNode(context.Span, getInnermostNodeForTie: true)?
-                .FirstAncestorOrSelf(f => f.IsKind(SyntaxKind.ThrowStatement, SyntaxKind.ThrowExpression));
-
-            Debug.Assert(node != null, $"{nameof(node)} is null");
-
-            if (node == null)
+            if (!TryFindFirstAncestorOrSelf(root, context.Span, out SyntaxNode node, f => f.IsKind(SyntaxKind.ThrowStatement, SyntaxKind.ThrowExpression)))
                 return;
 
             foreach (Diagnostic diagnostic in context.Diagnostics)

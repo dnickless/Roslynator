@@ -11,7 +11,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Roslynator.CSharp.Refactorings;
 
-namespace Roslynator.CSharp.CodeFixProviders
+namespace Roslynator.CSharp.CodeFixes
 {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(UseReturnInsteadOfAssignmentCodeFixProvider))]
     [Shared]
@@ -24,15 +24,9 @@ namespace Roslynator.CSharp.CodeFixProviders
 
         public sealed override async Task RegisterCodeFixesAsync(CodeFixContext context)
         {
-            SyntaxNode root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
+            SyntaxNode root = await context.GetSyntaxRootAsync().ConfigureAwait(false);
 
-            var statement = (StatementSyntax)root
-                .FindNode(context.Span, getInnermostNodeForTie: true)?
-                .FirstAncestorOrSelf(f => f.IsKind(SyntaxKind.IfStatement, SyntaxKind.SwitchStatement));
-
-            Debug.Assert(statement != null, $"{nameof(statement)} is null");
-
-            if (statement == null)
+            if (!TryFindFirstAncestorOrSelf(root, context.Span, out StatementSyntax statement, f => f.IsKind(SyntaxKind.IfStatement, SyntaxKind.SwitchStatement)))
                 return;
 
             CodeAction codeAction = CodeAction.Create(

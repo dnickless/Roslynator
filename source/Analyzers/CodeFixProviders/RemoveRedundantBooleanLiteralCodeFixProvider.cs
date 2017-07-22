@@ -14,7 +14,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
 using Roslynator.CSharp.Refactorings;
 
-namespace Roslynator.CSharp.CodeFixProviders
+namespace Roslynator.CSharp.CodeFixes
 {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(RemoveRedundantBooleanLiteralCodeFixProvider))]
     [Shared]
@@ -29,19 +29,15 @@ namespace Roslynator.CSharp.CodeFixProviders
         {
             SyntaxNode root = await context.GetSyntaxRootAsync().ConfigureAwait(false);
 
-            SyntaxNode node = root
-                .FindNode(context.Span, getInnermostNodeForTie: true)?
-                .FirstAncestorOrSelf(f => f.IsKind(
-                    SyntaxKind.TrueLiteralExpression,
-                    SyntaxKind.EqualsExpression,
-                    SyntaxKind.NotEqualsExpression,
-                    SyntaxKind.LogicalAndExpression,
-                    SyntaxKind.LogicalOrExpression));
-
-            Debug.Assert(node != null, $"{nameof(node)} is null");
-
-            if (node == null)
+            if (!TryFindFirstAncestorOrSelf(root, context.Span, out SyntaxNode node, f => f.IsKind(
+                SyntaxKind.TrueLiteralExpression,
+                SyntaxKind.EqualsExpression,
+                SyntaxKind.NotEqualsExpression,
+                SyntaxKind.LogicalAndExpression,
+                SyntaxKind.LogicalOrExpression)))
+            {
                 return;
+            }
 
             switch (node.Kind())
             {

@@ -10,7 +10,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Roslynator.CSharp.Refactorings;
 
-namespace Roslynator.CSharp.CodeFixProviders
+namespace Roslynator.CSharp.CodeFixes
 {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(SimplifyNullableOfTCodeFixProvider))]
     [Shared]
@@ -25,11 +25,7 @@ namespace Roslynator.CSharp.CodeFixProviders
         {
             SyntaxNode root = await context.GetSyntaxRootAsync().ConfigureAwait(false);
 
-            TypeSyntax type = root
-                .FindNode(context.Span, findInsideTrivia: true, getInnermostNodeForTie: true)?
-                .FirstAncestorOrSelf<TypeSyntax>();
-
-            if (type == null)
+            if (!TryFindFirstAncestorOrSelf(root, context.Span, out TypeSyntax type, findInsideTrivia: true))
                 return;
 
             TypeSyntax nullableType = GetNullableType(type);

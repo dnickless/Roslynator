@@ -9,7 +9,7 @@ using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Roslynator.CSharp.Refactorings;
 
-namespace Roslynator.CSharp.CodeFixProviders
+namespace Roslynator.CSharp.CodeFixes
 {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(RemoveOriginalExceptionCodeFixProvider))]
     [Shared]
@@ -24,11 +24,7 @@ namespace Roslynator.CSharp.CodeFixProviders
         {
             SyntaxNode root = await context.GetSyntaxRootAsync().ConfigureAwait(false);
 
-            ThrowStatementSyntax throwStatement = root
-                .FindNode(context.Span, getInnermostNodeForTie: true)?
-                .FirstAncestorOrSelf<ThrowStatementSyntax>();
-
-            if (throwStatement == null)
+            if (!TryFindFirstAncestorOrSelf(root, context.Span, out ThrowStatementSyntax throwStatement))
                 return;
 
             CodeAction codeAction = CodeAction.Create(
