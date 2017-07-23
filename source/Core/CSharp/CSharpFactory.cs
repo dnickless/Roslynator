@@ -1321,76 +1321,40 @@ namespace Roslynator.CSharp
                 default(ArrowExpressionClauseSyntax));
         }
 
-        public static PropertyDeclarationSyntax AutoPropertyDeclaration(AutoPropertyKind kind, TypeSyntax type, SyntaxToken identifier)
+        public static PropertyDeclarationSyntax PropertyDeclaration(
+            SyntaxTokenList modifiers,
+            TypeSyntax type,
+            SyntaxToken identifier,
+            AccessorListSyntax accessorList,
+            ExpressionSyntax value = null)
         {
-            return AutoPropertyDeclaration(
-                kind,
-                default(SyntaxTokenList),
-                type,
-                identifier);
-        }
-
-        public static PropertyDeclarationSyntax AutoPropertyDeclaration(AutoPropertyKind kind, SyntaxTokenList modifiers, TypeSyntax type, SyntaxToken identifier)
-        {
-            return AutoPropertyDeclaration(
-                kind,
+            return SyntaxFactory.PropertyDeclaration(
                 default(SyntaxList<AttributeListSyntax>),
                 modifiers,
                 type,
                 default(ExplicitInterfaceSpecifierSyntax),
-                identifier);
+                identifier,
+                accessorList,
+                default(ArrowExpressionClauseSyntax),
+                (value != null) ? EqualsValueClause(value) : default(EqualsValueClauseSyntax),
+                (value != null) ? SemicolonToken() : default(SyntaxToken));
         }
 
-        public static PropertyDeclarationSyntax AutoPropertyDeclaration(
-            AutoPropertyKind kind,
-            SyntaxList<AttributeListSyntax> attributeLists,
+        public static PropertyDeclarationSyntax PropertyDeclaration(
             SyntaxTokenList modifiers,
             TypeSyntax type,
-            ExplicitInterfaceSpecifierSyntax explicitInterfaceSpecifier,
-            SyntaxToken identifier)
+            SyntaxToken identifier,
+            ArrowExpressionClauseSyntax expressionBody)
         {
-            switch (kind)
-            {
-                case AutoPropertyKind.None:
-                    {
-                        return PropertyDeclaration(
-                            attributeLists,
-                            modifiers,
-                            type,
-                            explicitInterfaceSpecifier,
-                            identifier,
-                            AccessorList(
-                                AutoGetAccessorDeclaration(),
-                                AutoSetAccessorDeclaration()));
-                    }
-                case AutoPropertyKind.PrivateSet:
-                    {
-                        return PropertyDeclaration(
-                            attributeLists,
-                            modifiers,
-                            type,
-                            explicitInterfaceSpecifier,
-                            identifier,
-                            AccessorList(
-                                AutoGetAccessorDeclaration(),
-                                AutoSetAccessorDeclaration(Modifiers.Private())));
-                    }
-                case AutoPropertyKind.ReadOnly:
-                    {
-                        return PropertyDeclaration(
-                            attributeLists,
-                            modifiers,
-                            type,
-                            explicitInterfaceSpecifier,
-                            identifier,
-                            AccessorList(AutoGetAccessorDeclaration()));
-                    }
-                default:
-                    {
-                        Debug.Fail(kind.ToString());
-                        throw new ArgumentOutOfRangeException(nameof(kind));
-                    }
-            }
+            return SyntaxFactory.PropertyDeclaration(
+                default(SyntaxList<AttributeListSyntax>),
+                modifiers,
+                type,
+                default(ExplicitInterfaceSpecifierSyntax),
+                identifier,
+                default(AccessorListSyntax),
+                expressionBody,
+                default(EqualsValueClauseSyntax));
         }
         #endregion MemberDeclaration
 
