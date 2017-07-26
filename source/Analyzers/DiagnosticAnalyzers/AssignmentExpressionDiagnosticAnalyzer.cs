@@ -18,8 +18,6 @@ namespace Roslynator.CSharp.DiagnosticAnalyzers
             get
             {
                 return ImmutableArray.Create(
-                    DiagnosticDescriptors.UsePostfixUnaryOperatorInsteadOfAssignment,
-                    DiagnosticDescriptors.UsePostfixUnaryOperatorInsteadOfAssignmentFadeOut,
                     DiagnosticDescriptors.RemoveRedundantDelegateCreation,
                     DiagnosticDescriptors.RemoveRedundantDelegateCreationFadeOut);
             }
@@ -40,8 +38,6 @@ namespace Roslynator.CSharp.DiagnosticAnalyzers
         private void AnalyzeAssignmentExpression(SyntaxNodeAnalysisContext context)
         {
             var assignment = (AssignmentExpressionSyntax)context.Node;
-
-            UsePostfixUnaryOperatorInsteadOfAssignmentRefactoring.Analyze(context, assignment);
 
             RemoveRedundantDelegateCreationRefactoring.Analyze(context, assignment);
         }

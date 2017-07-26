@@ -2,6 +2,7 @@
 
 using System;
 using System.Diagnostics;
+using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -1240,6 +1241,64 @@ namespace Roslynator.CSharp
         #endregion List
 
         #region MemberDeclaration
+
+        internal static NamespaceDeclarationSyntax NamespaceDeclaration(string name, MemberDeclarationSyntax member)
+        {
+            return NamespaceDeclaration(ParseName(name), member);
+        }
+
+        public static NamespaceDeclarationSyntax NamespaceDeclaration(NameSyntax name, MemberDeclarationSyntax member)
+        {
+            return NamespaceDeclaration(name, SingletonList(member));
+        }
+
+        internal static NamespaceDeclarationSyntax NamespaceDeclaration(string name, SyntaxList<MemberDeclarationSyntax> members)
+        {
+            return NamespaceDeclaration(ParseName(name), members);
+        }
+
+        public static NamespaceDeclarationSyntax NamespaceDeclaration(NameSyntax name, SyntaxList<MemberDeclarationSyntax> members)
+        {
+            return SyntaxFactory.NamespaceDeclaration(name, default(SyntaxList<ExternAliasDirectiveSyntax>), default(SyntaxList<UsingDirectiveSyntax>), members);
+        }
+
+        public static ClassDeclarationSyntax ClassDeclaration(SyntaxTokenList modifiers, string identifier, SyntaxList<MemberDeclarationSyntax> members)
+        {
+            return ClassDeclaration(modifiers, Identifier(identifier), members);
+        }
+
+        public static ClassDeclarationSyntax ClassDeclaration(SyntaxTokenList modifiers, SyntaxToken identifier, SyntaxList<MemberDeclarationSyntax> members)
+        {
+            return SyntaxFactory.ClassDeclaration(
+                default(SyntaxList<AttributeListSyntax>),
+                modifiers,
+                identifier,
+                default(TypeParameterListSyntax),
+                default(BaseListSyntax),
+                default(SyntaxList<TypeParameterConstraintClauseSyntax>),
+                members);
+        }
+
+        public static ConstructorDeclarationSyntax ConstructorDeclaration(SyntaxTokenList modifiers, string identifier, ParameterListSyntax parameterList, BlockSyntax body)
+        {
+            return ConstructorDeclaration(
+                modifiers,
+                Identifier(identifier),
+                parameterList,
+                body);
+        }
+
+        public static ConstructorDeclarationSyntax ConstructorDeclaration(SyntaxTokenList modifiers, SyntaxToken identifier, ParameterListSyntax parameterList, BlockSyntax body)
+        {
+            return SyntaxFactory.ConstructorDeclaration(
+                default(SyntaxList<AttributeListSyntax>),
+                modifiers,
+                identifier,
+                parameterList,
+                default(ConstructorInitializerSyntax),
+                body);
+        }
+
         public static EnumMemberDeclarationSyntax EnumMemberDeclaration(string name, ExpressionSyntax value)
         {
             return EnumMemberDeclaration(Identifier(name), value);
@@ -2241,6 +2300,39 @@ namespace Roslynator.CSharp
         public static SwitchSectionSyntax DefaultSwitchSection(SyntaxList<StatementSyntax> statements)
         {
             return SwitchSection(DefaultSwitchLabel(), statements);
+        }
+
+        public static CompilationUnitSyntax CompilationUnit(MemberDeclarationSyntax member)
+        {
+            return CompilationUnit(
+                default(SyntaxList<UsingDirectiveSyntax>),
+                member);
+        }
+
+        public static CompilationUnitSyntax CompilationUnit(SyntaxList<UsingDirectiveSyntax> usings, MemberDeclarationSyntax member)
+        {
+            return CompilationUnit(
+                usings,
+                SingletonList(member));
+        }
+
+        public static CompilationUnitSyntax CompilationUnit(SyntaxList<UsingDirectiveSyntax> usings, SyntaxList<MemberDeclarationSyntax> members)
+        {
+            return SyntaxFactory.CompilationUnit(
+                default(SyntaxList<ExternAliasDirectiveSyntax>),
+                usings,
+                default(SyntaxList<AttributeListSyntax>),
+                members);
+        }
+
+        internal static SyntaxList<UsingDirectiveSyntax> UsingDirectives(string name)
+        {
+            return SingletonList(UsingDirective(ParseName(name)));
+        }
+
+        internal static SyntaxList<UsingDirectiveSyntax> UsingDirectives(params string[] names)
+        {
+            return List(names.Select(f => UsingDirective(ParseName(f))));
         }
     }
 }
