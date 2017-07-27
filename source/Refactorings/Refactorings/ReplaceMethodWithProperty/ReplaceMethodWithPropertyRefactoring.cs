@@ -35,11 +35,11 @@ namespace Roslynator.CSharp.Refactorings.ReplaceMethodWithProperty
 
             string propertyName = methodDeclaration.Identifier.ValueText;
 
-            ImmutableArray<DocumentNodeInfo> infos = await ReferenceFinder.FindReferences(methodSymbol, solution, allowCandidate: false, cancellationToken: cancellationToken).ConfigureAwait(false);
+            ImmutableArray<DocumentReferenceInfo> infos = await SyntaxFinder.FindReferencesByDocumentAsync(methodSymbol, solution, allowCandidate: false, cancellationToken: cancellationToken).ConfigureAwait(false);
 
-            foreach (DocumentNodeInfo info in infos)
+            foreach (DocumentReferenceInfo info in infos)
             {
-                var rewriter = new ReplaceMethodWithPropertySyntaxRewriter(info.Nodes, propertyName, methodDeclaration);
+                var rewriter = new ReplaceMethodWithPropertySyntaxRewriter(info.References, propertyName, methodDeclaration);
 
                 SyntaxNode newRoot = rewriter.Visit(info.Root);
 

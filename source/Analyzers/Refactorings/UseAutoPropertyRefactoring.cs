@@ -426,9 +426,9 @@ namespace Roslynator.CSharp.Refactorings
 
             Solution solution = document.Solution();
 
-            foreach (DocumentNodeInfo info in await ReferenceFinder.FindReferences(fieldSymbol, solution, allowCandidate: false, cancellationToken: cancellationToken).ConfigureAwait(false))
+            foreach (DocumentReferenceInfo info in await SyntaxFinder.FindReferencesByDocumentAsync(fieldSymbol, solution, allowCandidate: false, cancellationToken: cancellationToken).ConfigureAwait(false))
             {
-                ImmutableArray<SyntaxNode> nodes = info.Nodes;
+                ImmutableArray<SyntaxNode> nodes = info.References;
 
                 if (propertyDeclaration.SyntaxTree == info.SyntaxTree)
                 {

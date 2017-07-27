@@ -1882,6 +1882,13 @@ namespace Roslynator.CSharp
         {
             return parameter?.Modifiers.Contains(SyntaxKind.ParamsKeyword) == true;
         }
+
+        internal static SeparatedSyntaxList<ParameterSyntax> GetContainingList(this ParameterSyntax parameter)
+        {
+            var parameterList = parameter?.Parent as ParameterListSyntax;
+
+            return parameterList?.Parameters ?? default(SeparatedSyntaxList<ParameterSyntax>);
+        }
         #endregion ParameterSyntax
 
         #region PropertyDeclarationSyntax
@@ -3288,6 +3295,19 @@ namespace Roslynator.CSharp
             }
 
             return false;
+        }
+
+        internal static bool ContainsAll(this SyntaxTokenList tokenList, SyntaxKind kind1, SyntaxKind kind2)
+        {
+            return tokenList.Contains(kind1)
+                && tokenList.Contains(kind2);
+        }
+
+        internal static bool ContainsAll(this SyntaxTokenList tokenList, SyntaxKind kind1, SyntaxKind kind2, SyntaxKind kind3)
+        {
+            return tokenList.Contains(kind1)
+                && tokenList.Contains(kind2)
+                && tokenList.Contains(kind3);
         }
 
         public static SyntaxToken TrimTrivia(this SyntaxToken token)

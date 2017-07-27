@@ -6,6 +6,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
+using Roslynator.Text;
 
 namespace Roslynator.CSharp.Refactorings
 {
@@ -75,18 +76,18 @@ namespace Roslynator.CSharp.Refactorings
             SyntaxToken questionToken = conditionalExpression.QuestionToken;
             SyntaxToken colonToken = conditionalExpression.ColonToken;
 
-            var writer = new NodeWriter(conditionalExpression);
+            var builder = new SyntaxNodeTextBuilder(conditionalExpression);
 
-            writer.WriteLeadingTrivia();
-            writer.WriteSpan(condition);
+            builder.AppendLeadingTrivia();
+            builder.AppendSpan(condition);
 
-            Write(condition, whenTrue, questionToken, "? ", writer);
+            Write(condition, whenTrue, questionToken, "? ", builder);
 
-            Write(whenTrue, whenFalse, colonToken, ": ", writer);
+            Write(whenTrue, whenFalse, colonToken, ": ", builder);
 
-            writer.WriteTrailingTrivia();
+            builder.AppendTrailingTrivia();
 
-            ExpressionSyntax newNode = SyntaxFactory.ParseExpression(writer.ToString());
+            ExpressionSyntax newNode = SyntaxFactory.ParseExpression(builder.ToString());
 
             return document.ReplaceNodeAsync(conditionalExpression, newNode, cancellationToken);
         }
@@ -96,27 +97,27 @@ namespace Roslynator.CSharp.Refactorings
             ExpressionSyntax nextExpression,
             SyntaxToken token,
             string newText,
-            NodeWriter writer)
+            SyntaxNodeTextBuilder builder)
         {
             if (IsFixable(expression, token))
             {
                 if (!expression.GetTrailingTrivia().IsEmptyOrWhitespace()
                     || !token.LeadingTrivia.IsEmptyOrWhitespace())
                 {
-                    writer.WriteTrailingTrivia(expression);
-                    writer.WriteLeadingTrivia(token);
+                    builder.AppendTrailingTrivia(expression);
+                    builder.AppendLeadingTrivia(token);
                 }
 
-                writer.WriteTrailingTrivia(token);
-                writer.WriteLeadingTrivia(nextExpression);
-                writer.Write(newText);
-                writer.WriteSpan(nextExpression);
+                builder.AppendTrailingTrivia(token);
+                builder.AppendLeadingTrivia(nextExpression);
+                builder.Append(newText);
+                builder.AppendSpan(nextExpression);
             }
             else
             {
-                writer.WriteTrailingTrivia(expression);
-                writer.WriteFullSpan(token);
-                writer.WriteLeadingTriviaAndSpan(nextExpression);
+                builder.AppendTrailingTrivia(expression);
+                builder.AppendFullSpan(token);
+                builder.AppendLeadingTriviaAndSpan(nextExpression);
             }
         }
     }

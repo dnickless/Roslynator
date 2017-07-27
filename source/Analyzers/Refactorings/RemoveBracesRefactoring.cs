@@ -33,12 +33,11 @@ namespace Roslynator.CSharp.Refactorings
                         && closeBrace.LeadingTrivia.IsEmptyOrWhitespace()
                         && closeBrace.TrailingTrivia.IsEmptyOrWhitespace())
                     {
-                        context.ReportDiagnostic(
-                            DiagnosticDescriptors.RemoveBraces,
-                            block,
-                            node.GetTitle());
+                        string title = node.GetTitle();
 
-                        context.ReportBraces(DiagnosticDescriptors.RemoveBracesFadeOut, block);
+                        context.ReportDiagnostic(DiagnosticDescriptors.RemoveBraces, block, title);
+
+                        context.ReportBraces(DiagnosticDescriptors.RemoveBracesFadeOut, block, title);
                     }
                 }
             }
