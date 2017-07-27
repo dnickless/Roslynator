@@ -30,7 +30,7 @@ namespace Roslynator.CSharp.CodeFixes
             CodeAction codeAction = CodeAction.Create(
                 "Remove $",
                 cancellationToken => ReplaceInterpolatedStringWithStringLiteralRefactoring.RefactorAsync(context.Document, interpolatedString, cancellationToken),
-                DiagnosticIdentifiers.AvoidInterpolatedStringWithNoInterpolation + EquivalenceKeySuffix);
+                GetEquivalenceKey(DiagnosticIdentifiers.AvoidInterpolatedStringWithNoInterpolation));
 
             context.RegisterCodeFix(codeAction, context.Diagnostics);
         }

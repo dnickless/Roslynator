@@ -30,7 +30,7 @@ namespace Roslynator.CSharp.CodeFixes
             CodeAction codeAction = CodeAction.Create(
                 "Format braces",
                 cancellationToken => FormatEmptyBlockRefactoring.RefactorAsync(context.Document, block, cancellationToken),
-                DiagnosticIdentifiers.FormatEmptyBlock + EquivalenceKeySuffix);
+                GetEquivalenceKey(DiagnosticIdentifiers.FormatEmptyBlock));
 
             context.RegisterCodeFix(codeAction, context.Diagnostics);
         }

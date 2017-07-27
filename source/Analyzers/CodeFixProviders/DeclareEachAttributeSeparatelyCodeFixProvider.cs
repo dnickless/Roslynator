@@ -30,7 +30,7 @@ namespace Roslynator.CSharp.CodeFixes
             CodeAction codeAction = CodeAction.Create(
                 "Split attributes",
                 cancellationToken => DeclareEachAttributeSeparatelyRefactoring.RefactorAsync(context.Document, attributeList, cancellationToken),
-                DiagnosticIdentifiers.DeclareEachAttributeSeparately + EquivalenceKeySuffix);
+                GetEquivalenceKey(DiagnosticIdentifiers.DeclareEachAttributeSeparately));
 
             context.RegisterCodeFix(codeAction, context.Diagnostics);
         }

@@ -62,7 +62,7 @@ namespace Roslynator.CSharp.CodeFixes
                                 CodeAction codeAction = CodeAction.Create(
                                     $"Rename '{oldName}' to '{newName}'",
                                     c => Renamer.RenameSymbolAsync(context.Solution(), methodSymbol, newName, default(OptionSet), c),
-                                    diagnostic.Id + EquivalenceKeySuffix);
+                                    GetEquivalenceKey(diagnostic));
 
                                 context.RegisterCodeFix(codeAction, diagnostic);
                                 break;
@@ -81,7 +81,7 @@ namespace Roslynator.CSharp.CodeFixes
                                 CodeAction codeAction = CodeAction.Create(
                                     $"Rename '{name}' to '{newName}'",
                                     c => Renamer.RenameSymbolAsync(context.Solution(), methodSymbol, newName, default(OptionSet), c),
-                                    diagnostic.Id + EquivalenceKeySuffix);
+                                    GetEquivalenceKey(diagnostic));
 
                                 context.RegisterCodeFix(codeAction, diagnostic);
                                 break;

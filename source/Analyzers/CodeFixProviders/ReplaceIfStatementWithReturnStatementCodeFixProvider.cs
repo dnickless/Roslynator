@@ -30,7 +30,7 @@ namespace Roslynator.CSharp.CodeFixes
             CodeAction codeAction = CodeAction.Create(
                 "Replace if-else with return",
                 cancellationToken => ReplaceIfStatementWithReturnStatementRefactoring.RefactorAsync(context.Document, ifStatement, cancellationToken),
-                DiagnosticIdentifiers.ReplaceIfStatementWithReturnStatement + EquivalenceKeySuffix);
+                GetEquivalenceKey(DiagnosticIdentifiers.ReplaceIfStatementWithReturnStatement));
 
             context.RegisterCodeFix(codeAction, context.Diagnostics);
         }

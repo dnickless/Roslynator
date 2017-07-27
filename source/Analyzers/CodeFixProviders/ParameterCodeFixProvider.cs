@@ -44,7 +44,7 @@ namespace Roslynator.CSharp.CodeFixes
                             CodeAction codeAction = CodeAction.Create(
                                 "Add parameter to documentation comment",
                                 cancellationToken => refactoring.RefactorAsync(context.Document, parameter, cancellationToken),
-                                diagnostic.Id + EquivalenceKeySuffix);
+                                GetEquivalenceKey(diagnostic));
 
                             context.RegisterCodeFix(codeAction, diagnostic);
                             break;
@@ -56,7 +56,7 @@ namespace Roslynator.CSharp.CodeFixes
                                     ? "Remove 'params' modifier"
                                     : "Add 'params' modifier",
                                 cancellationToken => OverridingMemberCannotChangeParamsModifierRefactoring.RefactorAsync(context.Document, parameter, cancellationToken),
-                                diagnostic.Id + EquivalenceKeySuffix);
+                                GetEquivalenceKey(diagnostic));
 
                             context.RegisterCodeFix(codeAction, diagnostic);
                             break;

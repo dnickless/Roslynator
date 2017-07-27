@@ -41,7 +41,7 @@ namespace Roslynator.CSharp.CodeFixes
                             CodeAction codeAction = CodeAction.Create(
                                 "Format summary on a single line",
                                 cancellationToken => FormatSummaryOnSingleLineRefactoring.RefactorAsync(context.Document, documentationComment, cancellationToken),
-                                diagnostic.Id + EquivalenceKeySuffix);
+                                GetEquivalenceKey(diagnostic));
 
                             context.RegisterCodeFix(codeAction, diagnostic);
                             break;
@@ -51,7 +51,7 @@ namespace Roslynator.CSharp.CodeFixes
                             CodeAction codeAction = CodeAction.Create(
                                 "Format summary on multiple lines",
                                 cancellationToken => FormatSummaryOnMultipleLinesRefactoring.RefactorAsync(context.Document, documentationComment, cancellationToken),
-                                diagnostic.Id + EquivalenceKeySuffix);
+                                GetEquivalenceKey(diagnostic));
 
                             context.RegisterCodeFix(codeAction, diagnostic);
                             break;

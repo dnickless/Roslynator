@@ -61,7 +61,7 @@ namespace Roslynator.CSharp.CodeFixes
             return CodeAction.Create(
                 GetTitle(stringComparison),
                 cancellationToken => UseStringComparisonRefactoring.RefactorAsync(context.Document, binaryExpression, stringComparison, cancellationToken),
-                DiagnosticIdentifiers.UseStringComparison + stringComparison + EquivalenceKeySuffix);
+                GetEquivalenceKey(DiagnosticIdentifiers.UseStringComparison, stringComparison.ToString()));
         }
 
         private static CodeAction CreateCodeAction(CodeFixContext context, InvocationExpressionSyntax invocation, StringComparison stringComparison)
@@ -69,7 +69,7 @@ namespace Roslynator.CSharp.CodeFixes
             return CodeAction.Create(
                 GetTitle(stringComparison),
                 cancellationToken => UseStringComparisonRefactoring.RefactorAsync(context.Document, invocation, stringComparison, cancellationToken),
-                DiagnosticIdentifiers.UseStringComparison + stringComparison + EquivalenceKeySuffix);
+                GetEquivalenceKey(DiagnosticIdentifiers.UseStringComparison, stringComparison.ToString()));
         }
 
         private static string GetTitle(StringComparison stringComparison)

@@ -59,7 +59,7 @@ namespace Roslynator.CSharp.CodeFixes
                                             classDeclaration,
                                             cancellationToken);
                                     },
-                                    diagnostic.Id + EquivalenceKeySuffix);
+                                    GetEquivalenceKey(diagnostic));
                             }
                             else
                             {
@@ -76,7 +76,7 @@ namespace Roslynator.CSharp.CodeFixes
                                             classDeclarations,
                                             cancellationToken);
                                     },
-                                    diagnostic.Id + EquivalenceKeySuffix);
+                                    GetEquivalenceKey(diagnostic));
                             }
 
                             context.RegisterCodeFix(codeAction, diagnostic);
@@ -93,7 +93,7 @@ namespace Roslynator.CSharp.CodeFixes
                                         classDeclaration,
                                         cancellationToken);
                                 },
-                                diagnostic.Id + EquivalenceKeySuffix);
+                                GetEquivalenceKey(diagnostic));
 
                             context.RegisterCodeFix(codeAction, diagnostic);
                             break;
@@ -109,7 +109,7 @@ namespace Roslynator.CSharp.CodeFixes
                                         classDeclaration,
                                         cancellationToken);
                                 },
-                                diagnostic.Id + EquivalenceKeySuffix);
+                                GetEquivalenceKey(diagnostic));
 
                             context.RegisterCodeFix(codeAction, diagnostic);
                             break;

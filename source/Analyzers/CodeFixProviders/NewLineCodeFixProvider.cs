@@ -35,7 +35,7 @@ namespace Roslynator.CSharp.CodeFixes
                             CodeAction codeAction = CodeAction.Create(
                                 "Use linefeed as newline",
                                 cancellationToken => UseLinefeedAsNewLineRefactoring.RefactorAsync(context.Document, context.Span, cancellationToken),
-                                diagnostic.Id + EquivalenceKeySuffix);
+                                GetEquivalenceKey(diagnostic));
 
                             context.RegisterCodeFix(codeAction, diagnostic);
                             break;
@@ -45,7 +45,7 @@ namespace Roslynator.CSharp.CodeFixes
                             CodeAction codeAction = CodeAction.Create(
                                 "Use carriage return + linefeed as newline",
                                 cancellationToken => UseCarriageReturnAndLinefeedAsNewLineRefactoring.RefactorAsync(context.Document, context.Span, cancellationToken),
-                                diagnostic.Id + EquivalenceKeySuffix);
+                                GetEquivalenceKey(diagnostic));
 
                             context.RegisterCodeFix(codeAction, diagnostic);
                             break;

@@ -30,7 +30,7 @@ namespace Roslynator.CSharp.CodeFixes
             CodeAction codeAction = CodeAction.Create(
                 "Remove original exception from throw statement",
                 cancellationToken => RemoveOriginalExceptionFromThrowStatementRefactoring.RefactorAsync(context.Document, throwStatement, cancellationToken),
-                DiagnosticIdentifiers.RemoveOriginalExceptionFromThrowStatement + EquivalenceKeySuffix);
+                GetEquivalenceKey(DiagnosticIdentifiers.RemoveOriginalExceptionFromThrowStatement));
 
             context.RegisterCodeFix(codeAction, context.Diagnostics);
         }

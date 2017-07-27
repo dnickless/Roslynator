@@ -67,7 +67,7 @@ namespace Roslynator.CSharp.CodeFixes
                 CodeAction codeAction = CodeAction.Create(
                     $"Change type to '{SymbolDisplay.GetMinimalString(typeSymbol, semanticModel, type.Span.Start)}'",
                     cancellationToken => ChangeTypeRefactoring.ChangeTypeAsync(context.Document, type, typeSymbol, cancellationToken),
-                    diagnostic.Id + EquivalenceKeySuffix);
+                    GetEquivalenceKey(diagnostic));
 
                 context.RegisterCodeFix(codeAction, context.Diagnostics);
             }

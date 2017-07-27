@@ -32,7 +32,7 @@ namespace Roslynator.CSharp.CodeFixes
             CodeAction codeAction = CodeAction.Create(
                 "Remove braces from if-else",
                 cancellationToken => RemoveBracesFromIfElseElseRefactoring.RefactorAsync(context.Document, ifStatement, cancellationToken),
-                DiagnosticIdentifiers.RemoveBracesFromIfElse + EquivalenceKeySuffix);
+                GetEquivalenceKey(DiagnosticIdentifiers.RemoveBracesFromIfElse));
 
             context.RegisterCodeFix(codeAction, context.Diagnostics);
         }

@@ -34,7 +34,7 @@ namespace Roslynator.CSharp.CodeFixes
                         doStatement,
                         cancellationToken);
                 },
-                DiagnosticIdentifiers.AvoidUsageOfDoStatementToCreateInfiniteLoop + EquivalenceKeySuffix);
+                GetEquivalenceKey(DiagnosticIdentifiers.AvoidUsageOfDoStatementToCreateInfiniteLoop));
 
             context.RegisterCodeFix(codeAction, context.Diagnostics);
         }

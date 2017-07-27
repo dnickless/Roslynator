@@ -28,7 +28,7 @@ namespace Roslynator.CSharp.CodeFixes
             CodeAction codeAction = CodeAction.Create(
                 "Format statement on a separate line",
                 cancellationToken => FormatEachStatementOnSeparateLineRefactoring.RefactorAsync(context.Document, statement, cancellationToken),
-                DiagnosticIdentifiers.FormatEachStatementOnSeparateLine + EquivalenceKeySuffix);
+                GetEquivalenceKey(DiagnosticIdentifiers.FormatEachStatementOnSeparateLine));
 
             context.RegisterCodeFix(codeAction, context.Diagnostics);
         }

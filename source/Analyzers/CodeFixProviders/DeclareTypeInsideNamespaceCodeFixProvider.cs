@@ -30,7 +30,7 @@ namespace Roslynator.CSharp.CodeFixes
             CodeAction codeAction = CodeAction.Create(
                 $"Declare '{identifier.ValueText}' inside namespace",
                 cancellationToken => DeclareTypeInsideNamespaceRefactoring.RefactorAsync(context.Document, (MemberDeclarationSyntax)identifier.Parent, cancellationToken),
-                DiagnosticIdentifiers.DeclareTypeInsideNamespace + EquivalenceKeySuffix);
+                GetEquivalenceKey(DiagnosticIdentifiers.DeclareTypeInsideNamespace));
 
             context.RegisterCodeFix(codeAction, context.Diagnostics);
         }

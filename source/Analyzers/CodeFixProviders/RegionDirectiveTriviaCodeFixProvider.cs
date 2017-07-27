@@ -30,7 +30,7 @@ namespace Roslynator.CSharp.CodeFixes
             CodeAction codeAction = CodeAction.Create(
                 "Remove empty region",
                 cancellationToken => RemoveEmptyRegionRefactoring.RefactorAsync(context.Document, region, cancellationToken),
-                DiagnosticIdentifiers.RemoveEmptyRegion + EquivalenceKeySuffix);
+                GetEquivalenceKey(DiagnosticIdentifiers.RemoveEmptyRegion));
 
             context.RegisterCodeFix(codeAction, context.Diagnostics);
         }

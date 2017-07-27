@@ -36,7 +36,7 @@ namespace Roslynator.CSharp.CodeFixes
                         memberAccess,
                         cancellationToken);
                 },
-                DiagnosticIdentifiers.UseEmptyStringLiteralInsteadOfStringEmpty + EquivalenceKeySuffix);
+                GetEquivalenceKey(DiagnosticIdentifiers.UseEmptyStringLiteralInsteadOfStringEmpty));
 
             context.RegisterCodeFix(codeAction, context.Diagnostics);
         }

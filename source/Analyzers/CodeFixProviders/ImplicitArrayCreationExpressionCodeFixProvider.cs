@@ -34,7 +34,7 @@ namespace Roslynator.CSharp.CodeFixes
             CodeAction codeAction = CodeAction.Create(
                 $"Declare explicit type '{SymbolDisplay.GetMinimalString(typeSymbol, semanticModel, expression.Span.Start)}'",
                 cancellationToken => AvoidImplicitlyTypedArrayRefactoring.RefactorAsync(context.Document, expression, cancellationToken),
-                DiagnosticIdentifiers.AvoidImplicitlyTypedArray + EquivalenceKeySuffix);
+                GetEquivalenceKey(DiagnosticIdentifiers.AvoidImplicitlyTypedArray));
 
             context.RegisterCodeFix(codeAction, context.Diagnostics);
         }

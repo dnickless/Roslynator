@@ -30,7 +30,7 @@ namespace Roslynator.CSharp.CodeFixes
             CodeAction codeAction = CodeAction.Create(
                 "Simplify '!' expression",
                 cancellationToken => SimplifyLogicalNotExpressionRefactoring.RefactorAsync(context.Document, prefixUnaryExpression, cancellationToken),
-                DiagnosticIdentifiers.SimplifyLogicalNotExpression + EquivalenceKeySuffix);
+                GetEquivalenceKey(DiagnosticIdentifiers.SimplifyLogicalNotExpression));
 
             context.RegisterCodeFix(codeAction, context.Diagnostics);
         }

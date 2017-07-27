@@ -38,7 +38,7 @@ namespace Roslynator.CSharp.CodeFixes
                 CodeAction codeAction = CodeAction.Create(
                     "Change type to 'var'",
                     cancellationToken => ChangeTypeRefactoring.ChangeTypeToVarAsync(context.Document, type, cancellationToken),
-                    diagnostic.Id + EquivalenceKeySuffix);
+                    GetEquivalenceKey(diagnostic));
 
                 context.RegisterCodeFix(codeAction, context.Diagnostics);
             }

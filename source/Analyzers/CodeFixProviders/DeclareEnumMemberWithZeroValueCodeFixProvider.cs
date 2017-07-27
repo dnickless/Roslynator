@@ -30,7 +30,7 @@ namespace Roslynator.CSharp.CodeFixes
             CodeAction codeAction = CodeAction.Create(
                 "Declare enum member with zero value",
                 cancellationToken => DeclareEnumMemberWithZeroValueRefactoring.RefactorAsync(context.Document, enumDeclaration, cancellationToken),
-                DiagnosticIdentifiers.DeclareEnumMemberWithZeroValue + EquivalenceKeySuffix);
+                GetEquivalenceKey(DiagnosticIdentifiers.DeclareEnumMemberWithZeroValue));
 
             context.RegisterCodeFix(codeAction, context.Diagnostics);
         }

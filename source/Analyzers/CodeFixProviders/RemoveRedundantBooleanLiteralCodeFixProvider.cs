@@ -85,7 +85,7 @@ namespace Roslynator.CSharp.CodeFixes
             CodeAction codeAction = CodeAction.Create(
                 $"Remove redundant '{textToRemove}'",
                 createChangedDocument,
-                DiagnosticIdentifiers.RemoveRedundantBooleanLiteral + EquivalenceKeySuffix);
+                GetEquivalenceKey(DiagnosticIdentifiers.RemoveRedundantBooleanLiteral));
 
             context.RegisterCodeFix(codeAction, context.Diagnostics);
         }

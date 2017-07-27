@@ -37,7 +37,7 @@ namespace Roslynator.CSharp.CodeFixes
                         CodeAction codeAction = CodeAction.Create(
                             Title,
                             cancellationToken => UseRegularStringLiteralInsteadOfVerbatimStringLiteralRefactoring.RefactorAsync(context.Document, (LiteralExpressionSyntax)node, cancellationToken),
-                            DiagnosticIdentifiers.UseRegularStringLiteralInsteadOfVerbatimStringLiteral + EquivalenceKeySuffix);
+                            GetEquivalenceKey(DiagnosticIdentifiers.UseRegularStringLiteralInsteadOfVerbatimStringLiteral));
 
                         context.RegisterCodeFix(codeAction, context.Diagnostics);
                         break;
@@ -47,7 +47,7 @@ namespace Roslynator.CSharp.CodeFixes
                         CodeAction codeAction = CodeAction.Create(
                             Title,
                             cancellationToken => UseRegularStringLiteralInsteadOfVerbatimStringLiteralRefactoring.RefactorAsync(context.Document, (InterpolatedStringExpressionSyntax)node, cancellationToken),
-                            DiagnosticIdentifiers.UseRegularStringLiteralInsteadOfVerbatimStringLiteral + EquivalenceKeySuffix);
+                            GetEquivalenceKey(DiagnosticIdentifiers.UseRegularStringLiteralInsteadOfVerbatimStringLiteral));
 
                         context.RegisterCodeFix(codeAction, context.Diagnostics);
                         break;

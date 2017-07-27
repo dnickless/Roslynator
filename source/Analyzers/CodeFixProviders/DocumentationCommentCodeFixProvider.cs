@@ -36,7 +36,7 @@ namespace Roslynator.CSharp.CodeFixes
                             CodeAction codeAction = CodeAction.Create(
                                 "Add summary element",
                                 cancellationToken => AddSummaryToDocumentationCommentRefactoring.RefactorAsync(context.Document, documentationComment, cancellationToken),
-                                diagnostic.Id + EquivalenceKeySuffix);
+                                GetEquivalenceKey(diagnostic));
 
                             context.RegisterCodeFix(codeAction, diagnostic);
                             break;

@@ -30,7 +30,7 @@ namespace Roslynator.CSharp.CodeFixes
             CodeAction codeAction = CodeAction.Create(
                 "Add parentheses",
                 cancellationToken => AddConstructorArgumentListRefactoring.RefactorAsync(context.Document, objectCreationExpression, cancellationToken),
-                DiagnosticIdentifiers.AddConstructorArgumentList + EquivalenceKeySuffix);
+                GetEquivalenceKey(DiagnosticIdentifiers.AddConstructorArgumentList));
 
             context.RegisterCodeFix(codeAction, context.Diagnostics);
         }

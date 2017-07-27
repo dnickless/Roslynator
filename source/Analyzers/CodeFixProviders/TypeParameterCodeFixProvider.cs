@@ -44,7 +44,7 @@ namespace Roslynator.CSharp.CodeFixes
                             CodeAction codeAction = CodeAction.Create(
                                 "Add type parameter to documentation comment",
                                 cancellationToken => refactoring.RefactorAsync(context.Document, typeParameter, cancellationToken),
-                                diagnostic.Id + EquivalenceKeySuffix);
+                                GetEquivalenceKey(diagnostic));
 
                             context.RegisterCodeFix(codeAction, diagnostic);
                             break;
@@ -54,7 +54,7 @@ namespace Roslynator.CSharp.CodeFixes
                             CodeAction codeAction = CodeAction.Create(
                                 $"Remove unused type parameter '{typeParameter.Identifier}'",
                                 cancellationToken => UnusedTypeParameterRefactoring.RefactorAsync(context.Document, typeParameter, cancellationToken),
-                                diagnostic.Id + EquivalenceKeySuffix);
+                                GetEquivalenceKey(diagnostic));
 
                             context.RegisterCodeFix(codeAction, diagnostic);
                             break;

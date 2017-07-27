@@ -30,7 +30,7 @@ namespace Roslynator.CSharp.CodeFixes
             CodeAction codeAction = CodeAction.Create(
                 "Format binary operator on next line",
                 cancellationToken => FormatBinaryOperatorOnNextLineRefactoring.RefactorAsync(context.Document, binaryExpression, cancellationToken),
-                DiagnosticIdentifiers.FormatBinaryOperatorOnNextLine + EquivalenceKeySuffix);
+                GetEquivalenceKey(DiagnosticIdentifiers.FormatBinaryOperatorOnNextLine));
 
             context.RegisterCodeFix(codeAction, context.Diagnostics);
         }

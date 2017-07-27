@@ -30,7 +30,7 @@ namespace Roslynator.CSharp.CodeFixes
             CodeAction codeAction = CodeAction.Create(
                 "Remove empty finally clause",
                 cancellationToken => RemoveEmptyFinallyClauseRefactoring.RefactorAsync(context.Document, finallyClause, cancellationToken),
-                DiagnosticIdentifiers.RemoveEmptyFinallyClause + EquivalenceKeySuffix);
+                GetEquivalenceKey(DiagnosticIdentifiers.RemoveEmptyFinallyClause));
 
             context.RegisterCodeFix(codeAction, context.Diagnostics);
         }

@@ -33,7 +33,7 @@ namespace Roslynator.CSharp.CodeFixes
             CodeAction codeAction = CodeAction.Create(
                 title,
                 cancellationToken => ExtractTypeDeclarationToNewDocumentRefactoring.RefactorAsync(context.Document, memberDeclaration, cancellationToken),
-                DiagnosticIdentifiers.DeclareEachTypeInSeparateFile + EquivalenceKeySuffix);
+                GetEquivalenceKey(DiagnosticIdentifiers.DeclareEachTypeInSeparateFile));
 
             context.RegisterCodeFix(codeAction, context.Diagnostics);
         }

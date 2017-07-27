@@ -37,7 +37,7 @@ namespace Roslynator.CSharp.CodeFixes
                         CodeAction codeAction = CodeAction.Create(
                             Title,
                             cancellationToken => UseConditionalAccessRefactoring.RefactorAsync(context.Document, (BinaryExpressionSyntax)node, cancellationToken),
-                            DiagnosticDescriptors.UseConditionalAccess + EquivalenceKeySuffix);
+                            GetEquivalenceKey(DiagnosticIdentifiers.UseConditionalAccess));
 
                         context.RegisterCodeFix(codeAction, context.Diagnostics);
                         break;
@@ -47,7 +47,7 @@ namespace Roslynator.CSharp.CodeFixes
                         CodeAction codeAction = CodeAction.Create(
                             Title,
                             cancellationToken => UseConditionalAccessRefactoring.RefactorAsync(context.Document, (IfStatementSyntax)node, cancellationToken),
-                            DiagnosticDescriptors.UseConditionalAccess + EquivalenceKeySuffix);
+                            GetEquivalenceKey(DiagnosticIdentifiers.UseConditionalAccess));
 
                         context.RegisterCodeFix(codeAction, context.Diagnostics);
                         break;

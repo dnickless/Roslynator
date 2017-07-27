@@ -41,7 +41,7 @@ namespace Roslynator.CSharp.CodeFixes
             CodeAction codeAction = CodeAction.Create(
                 $"Use predefined type '{SymbolDisplay.GetString(typeSymbol)}'",
                 cancellationToken => UsePredefinedTypeRefactoring.RefactorAsync(context.Document, node, typeSymbol, cancellationToken),
-                DiagnosticIdentifiers.UsePredefinedType + EquivalenceKeySuffix);
+                GetEquivalenceKey(DiagnosticIdentifiers.UsePredefinedType));
 
             context.RegisterCodeFix(codeAction, context.Diagnostics);
         }

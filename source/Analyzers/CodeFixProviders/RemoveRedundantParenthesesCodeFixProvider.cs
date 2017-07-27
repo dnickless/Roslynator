@@ -30,7 +30,7 @@ namespace Roslynator.CSharp.CodeFixes
             CodeAction codeAction = CodeAction.Create(
                 "Remove redundant parentheses",
                 cancellationToken => RemoveRedundantParenthesesRefactoring.RefactorAsync(context.Document, parenthesizedExpression, cancellationToken),
-                DiagnosticIdentifiers.RemoveRedundantParentheses + EquivalenceKeySuffix);
+                GetEquivalenceKey(DiagnosticIdentifiers.RemoveRedundantParentheses));
 
             context.RegisterCodeFix(codeAction, context.Diagnostics);
         }

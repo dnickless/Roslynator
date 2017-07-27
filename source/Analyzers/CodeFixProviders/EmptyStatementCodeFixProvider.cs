@@ -30,7 +30,7 @@ namespace Roslynator.CSharp.CodeFixes
             CodeAction codeAction = CodeAction.Create(
                 "Remove empty statement",
                 cancellationToken => RemoveEmptyStatementRefactoring.RefactorAsync(context.Document, emptyStatement, cancellationToken),
-                DiagnosticIdentifiers.RemoveEmptyStatement + EquivalenceKeySuffix);
+                GetEquivalenceKey(DiagnosticIdentifiers.RemoveEmptyStatement));
 
             context.RegisterCodeFix(codeAction, context.Diagnostics);
         }

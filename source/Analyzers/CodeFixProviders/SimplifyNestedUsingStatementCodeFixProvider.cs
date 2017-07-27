@@ -41,7 +41,7 @@ namespace Roslynator.CSharp.CodeFixes
             CodeAction codeAction = CodeAction.Create(
                 title,
                 cancellationToken => SimplifyNestedUsingStatementRefactoring.RefactorAsync(context.Document, usingStatement, cancellationToken),
-                DiagnosticIdentifiers.SimplifyNestedUsingStatement + EquivalenceKeySuffix);
+                GetEquivalenceKey(DiagnosticIdentifiers.SimplifyNestedUsingStatement));
 
             context.RegisterCodeFix(codeAction, context.Diagnostics);
         }

@@ -30,7 +30,7 @@ namespace Roslynator.CSharp.CodeFixes
             CodeAction codeAction = CodeAction.Create(
                 "Remove empty argument list",
                 cancellationToken => RemoveEmptyArgumentListRefactoring.RefactorAsync(context.Document, argumentList, cancellationToken),
-                DiagnosticIdentifiers.RemoveEmptyArgumentList + EquivalenceKeySuffix);
+                GetEquivalenceKey(DiagnosticIdentifiers.RemoveEmptyArgumentList));
 
             context.RegisterCodeFix(codeAction, context.Diagnostics);
         }

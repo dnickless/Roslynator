@@ -32,7 +32,7 @@ namespace Roslynator.CSharp.CodeFixes
             CodeAction codeAction = CodeAction.Create(
                 $"Declare enum member with value {value}",
                 cancellationToken => CompositeEnumValueContainsUndefinedFlagRefactoring.RefactorAsync(context.Document, enumDeclaration, value, cancellationToken),
-                DiagnosticIdentifiers.CompositeEnumValueContainsUndefinedFlag + EquivalenceKeySuffix);
+                GetEquivalenceKey(DiagnosticIdentifiers.CompositeEnumValueContainsUndefinedFlag));
 
             context.RegisterCodeFix(codeAction, context.Diagnostics[0]);
         }

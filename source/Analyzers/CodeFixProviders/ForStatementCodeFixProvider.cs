@@ -42,7 +42,7 @@ namespace Roslynator.CSharp.CodeFixes
                                         forStatement,
                                         cancellationToken);
                                 },
-                                diagnostic.Id + EquivalenceKeySuffix);
+                                GetEquivalenceKey(diagnostic));
 
                             context.RegisterCodeFix(codeAction, diagnostic);
                             break;

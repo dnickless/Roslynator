@@ -32,7 +32,7 @@ namespace Roslynator.CSharp.CodeFixes
             CodeAction codeAction = CodeAction.Create(
                 "Use nameof operator",
                 cancellationToken => UseNameOfOperatorRefactoring.RefactorAsync(context.Document, node, identifier, cancellationToken),
-                DiagnosticIdentifiers.UseNameOfOperator + EquivalenceKeySuffix);
+                GetEquivalenceKey(DiagnosticIdentifiers.UseNameOfOperator));
 
             context.RegisterCodeFix(codeAction, context.Diagnostics[0]);
         }

@@ -30,7 +30,7 @@ namespace Roslynator.CSharp.CodeFixes
             CodeAction codeAction = CodeAction.Create(
                 "Call 'ConfigureAwait(false)'",
                 cancellationToken => CallConfigureAwaitRefactoring.RefactorAsync(context.Document, awaitExpression, cancellationToken),
-                DiagnosticIdentifiers.CallConfigureAwait + EquivalenceKeySuffix);
+                GetEquivalenceKey(DiagnosticIdentifiers.CallConfigureAwait));
 
             context.RegisterCodeFix(codeAction, context.Diagnostics);
         }

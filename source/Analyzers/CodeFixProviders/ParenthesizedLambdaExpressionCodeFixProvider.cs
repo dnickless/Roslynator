@@ -30,7 +30,7 @@ namespace Roslynator.CSharp.CodeFixes
             CodeAction codeAction = CodeAction.Create(
                 "Simplify lambda expression parameter list",
                 cancellationToken => SimplifyLambdaExpressionParameterListRefactoring.RefactorAsync(context.Document, lambda, cancellationToken),
-                DiagnosticIdentifiers.SimplifyLambdaExpressionParameterList + EquivalenceKeySuffix);
+                GetEquivalenceKey(DiagnosticIdentifiers.SimplifyLambdaExpressionParameterList));
 
             context.RegisterCodeFix(codeAction, context.Diagnostics);
         }

@@ -30,7 +30,7 @@ namespace Roslynator.CSharp.CodeFixes
             CodeAction codeAction = CodeAction.Create(
                 "Remove default underlying type",
                 cancellationToken => RemoveEnumDefaultUnderlyingTypeRefactoring.RefactorAsync(context.Document, baseType, cancellationToken),
-                DiagnosticIdentifiers.RemoveEnumDefaultUnderlyingType + EquivalenceKeySuffix);
+                GetEquivalenceKey(DiagnosticIdentifiers.RemoveEnumDefaultUnderlyingType));
 
             context.RegisterCodeFix(codeAction, context.Diagnostics);
         }

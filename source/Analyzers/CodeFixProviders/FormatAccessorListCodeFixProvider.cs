@@ -30,7 +30,7 @@ namespace Roslynator.CSharp.CodeFixes
             CodeAction codeAction = CodeAction.Create(
                 "Format accessor list",
                 cancellationToken => FormatAccessorListRefactoring.RefactorAsync(context.Document, accessorList, cancellationToken),
-                DiagnosticIdentifiers.FormatAccessorList + EquivalenceKeySuffix);
+                GetEquivalenceKey(DiagnosticIdentifiers.FormatAccessorList));
 
             context.RegisterCodeFix(codeAction, context.Diagnostics);
         }

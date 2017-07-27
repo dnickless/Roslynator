@@ -24,7 +24,7 @@ namespace Roslynator.CSharp.CodeFixes
             CodeAction codeAction = CodeAction.Create(
                 "Use spaces instead of tab",
                 cancellationToken => UseSpacesInsteadOfTabRefactoring.RefactorAsync(context.Document, context.Span, cancellationToken),
-                DiagnosticIdentifiers.UseSpacesInsteadOfTab + EquivalenceKeySuffix);
+                GetEquivalenceKey(DiagnosticIdentifiers.UseSpacesInsteadOfTab));
 
             context.RegisterCodeFix(codeAction, context.Diagnostics);
 

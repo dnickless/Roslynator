@@ -36,7 +36,7 @@ namespace Roslynator.CSharp.CodeFixes
                         label,
                         cancellationToken);
                 },
-                DiagnosticIdentifiers.RemoveUnnecessaryCaseLabel + EquivalenceKeySuffix);
+                GetEquivalenceKey(DiagnosticIdentifiers.RemoveUnnecessaryCaseLabel));
 
             context.RegisterCodeFix(codeAction, context.Diagnostics);
         }

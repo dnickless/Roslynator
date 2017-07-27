@@ -30,7 +30,7 @@ namespace Roslynator.CSharp.CodeFixes
             CodeAction codeAction = CodeAction.Create(
                 SplitVariableDeclarationRefactoring.GetTitle(variableDeclaration),
                 cancellationToken => SplitVariableDeclarationRefactoring.RefactorAsync(context.Document, variableDeclaration, cancellationToken),
-                DiagnosticIdentifiers.SplitVariableDeclaration + EquivalenceKeySuffix);
+                GetEquivalenceKey(DiagnosticIdentifiers.SplitVariableDeclaration));
 
             context.RegisterCodeFix(codeAction, context.Diagnostics);
         }

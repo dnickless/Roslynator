@@ -32,7 +32,7 @@ namespace Roslynator.CSharp.CodeFixes
             CodeAction codeAction = CodeAction.Create(
                 $"Parenthesize '{expression}'",
                 cancellationToken => AddParenthesesAccordingToOperatorPrecedenceRefactoring.RefactorAsync(context.Document, expression, cancellationToken),
-                DiagnosticIdentifiers.AddParenthesesAccordingToOperatorPrecedence + EquivalenceKeySuffix);
+                GetEquivalenceKey(DiagnosticIdentifiers.AddParenthesesAccordingToOperatorPrecedence));
 
             context.RegisterCodeFix(codeAction, context.Diagnostics);
         }

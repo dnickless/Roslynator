@@ -32,7 +32,7 @@ namespace Roslynator.CSharp.CodeFixes
             CodeAction codeAction = CodeAction.Create(
                 $"Merge '{innerText}' into interpolated string",
                 cancellationToken => MergeInterpolationIntoInterpolatedStringRefactoring.RefactorAsync(context.Document, interpolation, cancellationToken),
-                DiagnosticIdentifiers.MergeInterpolationIntoInterpolatedString + EquivalenceKeySuffix);
+                GetEquivalenceKey(DiagnosticIdentifiers.MergeInterpolationIntoInterpolatedString));
 
             context.RegisterCodeFix(codeAction, context.Diagnostics);
         }

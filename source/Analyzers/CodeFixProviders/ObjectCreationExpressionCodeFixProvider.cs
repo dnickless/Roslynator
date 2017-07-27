@@ -36,7 +36,7 @@ namespace Roslynator.CSharp.CodeFixes
                             CodeAction codeAction = CodeAction.Create(
                                 "Use C# 6.0 dictionary initializer",
                                 cancellationToken => UseCSharp6DictionaryInitializerRefactoring.RefactorAsync(context.Document, objectCreationExpression.Initializer, cancellationToken),
-                                diagnostic.Id + EquivalenceKeySuffix);
+                                GetEquivalenceKey(diagnostic));
 
                             context.RegisterCodeFix(codeAction, diagnostic);
                             break;

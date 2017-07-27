@@ -34,7 +34,7 @@ namespace Roslynator.CSharp.CodeFixes
             CodeAction codeAction = CodeAction.Create(
                 $"Use '{newType}'",
                 cancellationToken => UseGenericEventHandlerRefactoring.RefactorAsync(context.Document, type, cancellationToken),
-                DiagnosticIdentifiers.UseGenericEventHandler + EquivalenceKeySuffix);
+                GetEquivalenceKey(DiagnosticIdentifiers.UseGenericEventHandler));
 
             context.RegisterCodeFix(codeAction, context.Diagnostics);
         }

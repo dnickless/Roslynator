@@ -30,7 +30,7 @@ namespace Roslynator.CSharp.CodeFixes
             CodeAction codeAction = CodeAction.Create(
                 "Add empty line",
                 cancellationToken => AddEmptyLineAfterEmbeddedStatementRefactoring.RefactorAsync(context.Document, statement, cancellationToken),
-                DiagnosticIdentifiers.AddEmptyLineAfterEmbeddedStatement + EquivalenceKeySuffix);
+                GetEquivalenceKey(DiagnosticIdentifiers.AddEmptyLineAfterEmbeddedStatement));
 
             context.RegisterCodeFix(codeAction, context.Diagnostics);
         }
