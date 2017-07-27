@@ -1,11 +1,11 @@
 ﻿// Copyright (c) Josef Pihrt. All rights reserved. Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
-using System.Diagnostics;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Text;
+using static Roslynator.Diagnostics.DebugHelper;
 
 namespace Roslynator.CSharp.CodeFixes
 {
@@ -16,51 +16,59 @@ namespace Roslynator.CSharp.CodeFixes
         protected static bool TryFindFirstAncestorOrSelf<TNode>(
             SyntaxNode root,
             TextSpan span,
-            out TNode result,
+            out TNode node,
             Func<TNode, bool> predicate = null,
             bool findInsideTrivia = false,
             bool getInnermostNodeForTie = true,
             bool ascendOutOfTrivia = true) where TNode : SyntaxNode
         {
-            result = root
+            node = root
                 .FindNode(span, findInsideTrivia: findInsideTrivia, getInnermostNodeForTie: getInnermostNodeForTie)?
                 .FirstAncestorOrSelf(predicate, ascendOutOfTrivia: ascendOutOfTrivia);
 
-            DebugIfNull(result);
+            AssertNotNull(node);
 
-            return result != null;
+            return node != null;
         }
 
         protected static bool TryFindFirstDescendantOrSelf<TNode>(
             SyntaxNode root,
             TextSpan span,
-            out TNode result,
+            out TNode node,
             bool findInsideTrivia = false,
             bool getInnermostNodeForTie = true,
             Func<SyntaxNode, bool> descendIntoChildren = null,
             bool descendIntoTrivia = true) where TNode : SyntaxNode
         {
-            result = root
+            node = root
                 .FindNode(span, findInsideTrivia: findInsideTrivia, getInnermostNodeForTie: getInnermostNodeForTie)?
                 .FirstDescendantOrSelf<TNode>(span, descendIntoChildren: descendIntoChildren, descendIntoTrivia: descendIntoTrivia);
 
-            DebugIfNull(result);
+            AssertNotNull(node);
 
-            return result != null;
+            return node != null;
         }
 
         protected static bool TryFindNode<TNode>(
             SyntaxNode root,
             TextSpan span,
-            out TNode result,
+            out TNode node,
             bool findInsideTrivia = false,
-            bool getInnermostNodeForTie = true) where TNode : SyntaxNode
+            bool getInnermostNodeForTie = true,
+            Func<TNode, bool> predicate = null) where TNode : SyntaxNode
         {
-            result = root.FindNode(span, findInsideTrivia: findInsideTrivia, getInnermostNodeForTie: getInnermostNodeForTie) as TNode;
+            node = root.FindNode(span, findInsideTrivia: findInsideTrivia, getInnermostNodeForTie: getInnermostNodeForTie) as TNode;
 
-            DebugIfNull(result);
+            if (node != null
+                && predicate != null
+                && !predicate(node))
+            {
+                node = null;
+            }
 
-            return result != null;
+            AssertNotNull(node);
+
+            return node != null;
         }
 
         protected static bool TryFindToken(
@@ -74,7 +82,7 @@ namespace Roslynator.CSharp.CodeFixes
 
             bool success = (kind == SyntaxKind.None) ? !token.IsKind(SyntaxKind.None) : token.IsKind(kind);
 
-            DebugIf(success, nameof(token), kind);
+            Assert(success, nameof(token), kind);
 
             return success;
         }
@@ -90,21 +98,9 @@ namespace Roslynator.CSharp.CodeFixes
 
             bool success = (kind == SyntaxKind.None) ? !trivia.IsKind(SyntaxKind.None) : trivia.IsKind(kind);
 
-            DebugIf(success, nameof(trivia), kind);
+            Assert(success, nameof(trivia), kind);
 
             return success;
-        }
-
-        [Conditional("DEBUG")]
-        private static void DebugIfNull<TNode>(TNode result) where TNode : SyntaxNode
-        {
-            Debug.Assert(result != null, $"{nameof(result)} is null");
-        }
-
-        [Conditional("DEBUG")]
-        private static void DebugIf(bool condition, string name, SyntaxKind kind = SyntaxKind.None)
-        {
-            Debug.Assert(condition, (kind == SyntaxKind.None) ? $"{name} is {kind}" : $"{name} is not {kind}");
         }
     }
 }
